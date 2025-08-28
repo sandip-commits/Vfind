@@ -136,6 +136,7 @@ const EmployerLoginPage = () => {
           role: "Employer",
         }),
       });
+      
 
       if (!loginRes.ok) {
         alert("Invalid Credentials");
@@ -144,7 +145,12 @@ const EmployerLoginPage = () => {
       }
 
       const loginData = await loginRes.json();
+      
+console.log(loginData)
+
+
       const authToken = loginData.authToken;
+      console.log(authToken)
 
       if (!authToken) {
         alert("Login failed: no auth token returned");
@@ -154,6 +160,8 @@ const EmployerLoginPage = () => {
 
       // Store the token
       localStorage.setItem("authToken", authToken);
+
+
 
       // Step 2: Send OTP
       await sendOtp(authToken, userEmail);
