@@ -190,7 +190,7 @@ const EmployerLoginPage = () => {
       setOtp(new Array(6).fill(""));
       
       // Reset timers
-      setTimeLeft(600); // Reset main timer
+      setTimeLeft(600);
       setCanResend(false);
       setResendCooldown(60); // 60 seconds cooldown
 
@@ -273,7 +273,7 @@ const EmployerLoginPage = () => {
                 height={14}
                 className="text-white"
               />
-              Trusted by 9 Cr+ candidates | 5 Lakh+ employers
+              Trusted by 10 Cr+ candidates | 4 Lakh+ employers
             </div>
           </div>
           <div className="mt-4 flex -space-x-2">
