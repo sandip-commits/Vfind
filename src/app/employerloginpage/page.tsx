@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Navbar from "../../../components/navbar";
 
 const EmployerLoginPage = () => {
   const router = useRouter();
@@ -136,7 +137,7 @@ const EmployerLoginPage = () => {
           role: "Employer",
         }),
       });
-      
+
 
       if (!loginRes.ok) {
         alert("Invalid Credentials");
@@ -145,12 +146,12 @@ const EmployerLoginPage = () => {
       }
 
       const loginData = await loginRes.json();
-      
-console.log(loginData)
+
+      // console.log(loginData)
 
 
       const authToken = loginData.authToken;
-      console.log(authToken)
+      // console.log(authToken)
 
       if (!authToken) {
         alert("Login failed: no auth token returned");
@@ -196,7 +197,7 @@ console.log(loginData)
 
       // Reset OTP input
       setOtp(new Array(6).fill(""));
-      
+
       // Reset timers
       setTimeLeft(600);
       setCanResend(false);
@@ -234,10 +235,10 @@ console.log(loginData)
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`, 
+            Authorization: `Bearer ${authToken}`,
           },
           body: JSON.stringify({
-            otp_code: enteredOtp, 
+            otp_code: enteredOtp,
           }),
         }
       );
@@ -259,203 +260,207 @@ console.log(loginData)
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-blue-50 px-6">
-      <div className="flex flex-col lg:flex-row gap-8 max-w-6xl w-full">
-        {/* Left section */}
-        <div
-          style={{
-            background:
-              "linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(238, 174, 202, 0.14) 72%, rgba(39, 93, 245, 0.11) 100%)",
-          }}
-          className="hidden md:flex flex-col justify-center w-full lg:w-[699px] h-auto md:h-[400px] lg:h-[481px] rounded-2xl shadow p-6 md:p-8 lg:p-10"
-        >
-          <h1 className="text-[48px] font-bold text-[#121224] leading-tight">
-            Find & hire the right <br /> talent with us
-          </h1>
-          <div className="mt-4 flex items-center gap-2 text-sm text-[#474D6A]">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/icons/check.png"
-                alt="Check Icon"
-                width={14}
-                height={14}
-                className="text-white"
-              />
-              Trusted by 10 Cr+ candidates | 4 Lakh+ employers
-            </div>
-          </div>
-          <div className="mt-4 flex -space-x-2">
-            {[...Array(5)].map((_, i) => (
-              <Image
-                key={i}
-                width={32}
-                height={32}
-                src="/assets/profile.png"
-                className="w-8 h-8 rounded-full border-2 border-white"
-                alt="Employer Avatar"
-              />
-            ))}
-          </div>
-          <div className="mt-auto flex justify-end">
-            <div className="w-35 mb-2 h-35 rounded-full overflow-hidden">
-              <Image
-                src="/assets/profile.png"
-                alt="Login Illustration"
-                width={194}
-                height={194}
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
+    <div>
+      <Navbar />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-blue-50 px-4 sm:px-6">
 
-        {/* Right section */}
-        <div className="bg-white rounded-2xl shadow p-8 w-full max-w-md h-fit">
-          {step === 1 && (
-            <>
-              <h2 className="text-[22px] font-medium text-[#121224] mt-2">
-                Login with Email
-              </h2>
-              <div className="mt-5">
-                <label className="block text-sm text-[#091E42] mb-1">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setEmail(value);
-                    setEmailError(
-                      validateEmail(value)
-                        ? ""
-                        : "Please enter a valid email address"
-                    );
-                  }}
-                  placeholder="Enter your email"
-                  className="w-full border rounded-md px-3 py-2 outline-none"
+        <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 max-w-7xl w-full">
+          {/* Left section - Hidden on mobile and small tablets */}
+          <div
+            style={{
+              background:
+                "linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(238, 174, 202, 0.14) 72%, rgba(39, 93, 245, 0.11) 100%)",
+            }}
+            className="hidden lg:flex flex-col justify-center w-full xl:w-[699px] h-auto lg:h-[420px] xl:h-[481px] rounded-2xl shadow-lg p-6 lg:p-8 xl:p-10"
+          >
+            <h1 className="text-3xl lg:text-4xl xl:text-[48px] font-bold text-[#121224] leading-tight">
+              Find & hire the right <br className="hidden xl:block" /> 
+              <span className="xl:hidden">talent with us</span>
+              <span className="hidden xl:inline">talent with us</span>
+            </h1>
+            <div className="mt-4 flex items-center gap-2 text-sm text-[#474D6A]">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/icons/check.png"
+                  alt="Check Icon"
+                  width={14}
+                  height={14}
+                  className="text-white flex-shrink-0"
                 />
-                {emailError && (
-                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
-                )}
+                <span className="text-xs lg:text-sm">Trusted by 10 Cr+ candidates | 4 Lakh+ employers</span>
               </div>
-              <div className="mt-5">
-                <label className="block text-sm text-[#091E42] mb-1">
-                  Password
-                </label>
-                <div className="flex items-center border rounded-md px-3">
+            </div>
+            <div className="mt-4 flex -space-x-2">
+              {[...Array(5)].map((_, i) => (
+                <Image
+                  key={i}
+                  width={32}
+                  height={32}
+                  src="/assets/profile.png"
+                  className="w-7 h-7 lg:w-8 lg:h-8 rounded-full shadow-sm"
+                  alt="Employer Avatar"
+                />
+              ))}
+            </div>
+            <div className="mt-auto flex justify-end">
+              <div className="w-32 lg:w-40 xl:w-48 h-32 lg:h-40 xl:h-48 rounded-full overflow-hidden">
+                <Image
+                  src="/assets/profile.png"
+                  alt="Login Illustration"
+                  width={194}
+                  height={194}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right section - Responsive form */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-md h-fit mx-auto xl:mx-0">
+            {step === 1 && (
+              <>
+                <h2 className="text-xl sm:text-[22px] font-medium text-[#121224] mt-2">
+                  Login with Email
+                </h2>
+                <div className="mt-5">
+                  <label className="block text-sm text-[#091E42] mb-1">Email</label>
                   <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                    className="w-full py-2 outline-none"
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setEmail(value);
+                      setEmailError(
+                        validateEmail(value)
+                          ? ""
+                          : "Please enter a valid email address"
+                      );
+                    }}
+                    placeholder="Enter your email"
+                    className="w-full rounded-md px-3 py-2.5 outline-none ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="text-blue-500 text-sm whitespace-nowrap pl-3"
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </button>
+                  {emailError && (
+                    <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                  )}
                 </div>
-                <div className="text-right mt-2">
-                  <a
-                    href="/forgot-password"
-                    className="text-sm text-blue-600 hover:underline"
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
-              </div>
-              <button
-                onClick={handleLogin}
-                disabled={isLoading || !!emailError || !email || !password}
-                className={`mt-6 w-full py-2 rounded-lg font-medium transition-colors ${
-                  !emailError && email && password
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                {isLoading ? "Processing..." : "Continue"}
-              </button>
-              <div className="mt-4 text-center">
-                <p className="text-sm text-gray-600">
-                  Did not have an account?{" "}
-                  <a
-                    href="/foremployer"
-                    className="text-blue-600 font-medium hover:underline"
-                  >
-                    Sign up
-                  </a>
-                </p>
-              </div>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <h2 className="text-[22px] font-medium text-[#121224] mt-2">
-                Enter the OTP sent to your email
-              </h2>
-              <p className="text-sm text-gray-500 mt-2">
-                <strong>{email}</strong>
-              </p>
-              <div className="mt-5">
-                <label className="block text-sm text-[#091E42] mb-1">OTP</label>
-                <div className="flex gap-2 justify-between max-w-xs">
-                  {otp.map((data, index) => (
+                <div className="mt-5">
+                  <label className="block text-sm text-[#091E42] mb-1">
+                    Password
+                  </label>
+                  <div className="flex items-center rounded-md px-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
                     <input
-                      key={index}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      className="w-12 h-12 text-center border rounded-md text-xl outline-none"
-                      value={data}
-                      onChange={(e) => handleOtpChange(e.target, index)}
-                      onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                      ref={(el) => {
-                        if (el) inputRefs.current[index] = el;
-                      }}
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="w-full py-2.5 outline-none"
                     />
-                  ))}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="text-blue-500 text-sm whitespace-nowrap pl-3 hover:text-blue-600 transition-colors"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                  <div className="text-right mt-2">
+                    <a
+                      href="/forgot-password"
+                      className="text-sm text-blue-600 hover:underline transition-all"
+                    >
+                      Forgot Password?
+                    </a>
+                  </div>
                 </div>
-               
-              </div>
+                <button
+                  onClick={handleLogin}
+                  disabled={isLoading || !!emailError || !email || !password}
+                  className={`mt-6 w-full py-2.5 rounded-lg font-medium transition-all ${!emailError && email && password
+                    ? "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800"
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    }`}
+                >
+                  {isLoading ? "Processing..." : "Continue"}
+                </button>
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-600">
+                    Did not have an account?{" "}
+                    <a
+                      href="/foremployer"
+                      className="text-blue-600 font-medium hover:underline transition-all"
+                    >
+                      Sign up
+                    </a>
+                  </p>
+                </div>
+              </>
+            )}
 
-              {/* Resend OTP Section */}
-              <div className="mt-4 text-end">
-                {canResend ? (
-                  <button
-                    onClick={handleResendOtp}
-                    disabled={isResending}
-                    className="text-blue-600 text-sm hover:underline disabled:opacity-50"
-                  >
-                    {isResending ? "Resending..." : "Resend OTP"}
-                  </button>
-                ) : (
-                  <p className="text-sm text-gray-500">
-                    Resend OTP in {resendCooldown}s
+            {step === 2 && (
+              <>
+                <h2 className="text-xl sm:text-[22px] font-medium text-[#121224] mt-2">
+                  Enter the OTP sent to your email
+                </h2>
+                <p className="text-sm text-gray-500 mt-2 break-all">
+                  <strong>{email}</strong>
+                </p>
+                <div className="mt-5">
+                  <label className="block text-sm text-[#091E42] mb-1">OTP</label>
+                  <div className="flex gap-2 justify-between max-w-xs mx-auto sm:mx-0">
+                    {otp.map((data, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        className="w-10 h-10 sm:w-12 sm:h-12 text-center rounded-md text-lg sm:text-xl outline-none ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+                        value={data}
+                        onChange={(e) => handleOtpChange(e.target, index)}
+                        onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                        ref={(el) => {
+                          if (el) inputRefs.current[index] = el;
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                </div>
+
+                {/* Resend OTP Section */}
+                <div className="mt-4 text-end">
+                  {canResend ? (
+                    <button
+                      onClick={handleResendOtp}
+                      disabled={isResending}
+                      className="text-blue-600 text-sm hover:underline disabled:opacity-50 transition-all"
+                    >
+                      {isResending ? "Resending..." : "Resend OTP"}
+                    </button>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      Resend OTP in {resendCooldown}s
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleVerifyOtp}
+                  disabled={isLoading || timeLeft === 0}
+                  className={`mt-6 w-full py-2.5 rounded-lg font-medium transition-all ${!isLoading && timeLeft > 0
+                    ? "bg-green-600 text-white hover:bg-green-700 active:bg-green-800"
+                    : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    }`}
+                >
+                  {isLoading ? "Verifying..." : "Verify OTP"}
+                </button>
+                {timeLeft === 0 && (
+                  <p className="mt-2 text-center text-red-600 text-sm">
+                    OTP expired. Please login again to request a new OTP.
                   </p>
                 )}
-              </div>
-
-              <button
-                onClick={handleVerifyOtp}
-                disabled={isLoading || timeLeft === 0}
-                className={`mt-6 w-full py-2 rounded-lg font-medium transition-colors ${
-                  !isLoading && timeLeft > 0
-                    ? "bg-green-600 text-white hover:bg-green-700"
-                    : "bg-gray-300 text-gray-600 cursor-not-allowed"
-                }`}
-              >
-                {isLoading ? "Verifying..." : "Verify OTP"}
-              </button>
-              {timeLeft === 0 && (
-                <p className="mt-2 text-center text-red-600 text-sm">
-                  OTP expired. Please login again to request a new OTP.
-                </p>
-              )}
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -31,9 +31,19 @@ export default function JobData() {
   const [typeFilter, setTypeFilter] = useState("");
   const [minExperience, setMinExperience] = useState("");
 
+  // Auth token from localStorage
+  const [, setAuthToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); 
+    // console.log(token)
+    if (token) setAuthToken(token);
+  }, []);
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           "https://x8ki-letl-twmt.n7.xano.io/api:W58sMfI8/jobs"
         );

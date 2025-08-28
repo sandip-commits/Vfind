@@ -38,6 +38,7 @@ export default function EmployerDashboard() {
   const [showAllJobs, setShowAllJobs] = useState(false);
   const [mobileActionMenu, setMobileActionMenu] = useState<number | null>(null);
 
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) return;
@@ -118,7 +119,6 @@ export default function EmployerDashboard() {
       alert("Failed to delete the job. Please try again.");
     }
   };
-
 
   const toggleMobileActionMenu = (jobId: number) => {
     setMobileActionMenu(mobileActionMenu === jobId ? null : jobId);
@@ -221,7 +221,18 @@ export default function EmployerDashboard() {
                         <td className="py-2 px-3">
                           {new Date(job.updated_at).toLocaleDateString()}
                         </td>
-                        <td className="py-2 px-3">{job.applicants_count ?? 0}</td>
+                        <td className="py-2 px-3">
+                            <a
+                              href={`/EmployerDashboard/Applicants/${job.id}`}
+                              className="text-blue-600 hover:underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              View
+                            </a>
+
+
+                        </td>
                         <td className="py-2 px-3">
                           <div className="relative">
                             <div className="flex items-center gap-3">
@@ -251,59 +262,6 @@ export default function EmployerDashboard() {
                                 <FaTrash size={16} />
                               </button>
                             </div>
-
-                            {/* <button
-                            onClick={() => setMobileActionMenu(mobileActionMenu === job.id ? null : job.id)}
-                            className="p-1 rounded hover:bg-gray-100"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-gray-500"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                            </svg>
-                          </button> */}
-
-
-                            {/* {mobileActionMenu === job.id && (
-                            <div className="absolute right-0 z-10  w-25 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              <div className="py-1">
-                                <a
-                                  href={`/EmployerDashboard/jobPreview/${job.id}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                  Preview
-                                </a>
-                                <button
-                                  onClick={() => {
-                                    handleEdit(job);
-                                    setMobileActionMenu(null);
-                                  }}
-                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    handleDelete(job.id);
-                                    setMobileActionMenu(null);
-                                  }}
-                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </div>
-                          )} */}
-
-
-
-
-
                           </div>
                         </td>
                       </tr>
@@ -318,6 +276,7 @@ export default function EmployerDashboard() {
                 </tbody>
               </table>
             </div>
+
 
             {/* Mobile List */}
             <div className="md:hidden mt-3 space-y-3">

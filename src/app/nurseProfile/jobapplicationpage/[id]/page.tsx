@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Loader from "../../../../../components/loading";
-import { MapPin, DollarSignIcon, Clock, Briefcase, ArrowLeft } from "lucide-react";
+import { MapPin, DollarSignIcon, Clock, Briefcase } from "lucide-react";
 
 interface Job {
   id: number;
@@ -28,10 +28,18 @@ export default function JobApplicationPage() {
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null); // state for token
+
+  // Fetch token from localStorage on mount
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // same key as login page
+    if (token) setAuthToken(token);
+  }, []);
 
   useEffect(() => {
     if (!id) {
-      router.push("/dashboard/nurseProfile");
+      router.push("/nurseProfile");
       return;
     }
 
@@ -52,31 +60,70 @@ export default function JobApplicationPage() {
     fetchJob();
   }, [id, router]);
 
+  const handleSubmitApplication = async () => {
+    if (!job) return;
+
+    const emailInput = (document.querySelector(
+      'input[type="email"]'
+    ) as HTMLInputElement)?.value;
+
+    if (!emailInput) {
+      alert("Email is required");
+      return;
+    }
+
+    if (!authToken) {
+      alert("You must be logged in to apply.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      // Hit the applications API using the token
+      const res = await fetch(
+        "https://x8ki-letl-twmt.n7.xano.io/api:PX2mK6Kr/applications",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`, // use token from state
+          },
+          body: JSON.stringify({
+            jobs_id: job.id,
+            status: "applied",
+            applied_date: new Date().toISOString(), 
+            email: emailInput,
+          }),
+
+        }
+      );
+
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message || "Failed to submit application");
+
+      alert("Job application sent successfully!");
+      router.push("/nurseProfile");
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to submit application");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) return <Loader loading={true} message="Fetching job data..." />;
   if (error || !job)
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-red-50 border-l-4 border-red-500 p-4">
           <p className="text-red-700">{error || "Job not found."}</p>
-          <button
-            className="mt-2 text-blue-600 hover:text-blue-800"
-            onClick={() => router.push("/dashboard/nurseProfile")}
-          >
-            ← Back to job listings
-          </button>
         </div>
       </div>
     );
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <button
-        onClick={() => router.back()}
-        className="flex items-center text-blue-600 hover:text-blue-800 mb-6"
-      >
-        <ArrowLeft className="w-5 h-5 mr-1" /> Back to Jobs
-      </button>
-
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6">
           <div className="flex items-center">
@@ -91,7 +138,6 @@ export default function JobApplicationPage() {
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Job Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex items-start">
               <MapPin className="h-5 w-5 text-gray-400" />
@@ -128,7 +174,6 @@ export default function JobApplicationPage() {
             </div>
           </div>
 
-          {/* Job Description */}
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-2">Job Description</h2>
             <div className="prose prose-sm max-w-none text-gray-700">
@@ -138,7 +183,6 @@ export default function JobApplicationPage() {
             </div>
           </div>
 
-          {/* Requirements */}
           {job.requirements && job.requirements.length > 0 && (
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-2">Requirements</h2>
@@ -150,7 +194,6 @@ export default function JobApplicationPage() {
             </div>
           )}
 
-          {/* Benefits */}
           {job.benefits && job.benefits.length > 0 && (
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-2">Benefits</h2>
@@ -162,7 +205,6 @@ export default function JobApplicationPage() {
             </div>
           )}
 
-          {/* Apply Section */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Apply for this position</h2>
             {job.contact_email ? (
@@ -191,8 +233,12 @@ export default function JobApplicationPage() {
                     className="w-full rounded-md border-gray-300 shadow-sm p-2 focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
-                <button className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">
-                  Submit Application
+                <button
+                  disabled={submitting}
+                  onClick={handleSubmitApplication}
+                  className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {submitting ? "Submitting..." : "Submit Application"}
                 </button>
               </div>
             )}

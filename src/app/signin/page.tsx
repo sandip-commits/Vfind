@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Navbar from "../../../components/navbar";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -48,6 +49,8 @@ export default function LoginPage() {
   };
 
   return (
+    <div>
+      <Navbar/>
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
       {/* Flex container with responsive behavior */}
       <div className="flex flex-col md:flex-col lg:flex-row gap-6 max-w-5xl w-full">
@@ -195,6 +198,7 @@ export default function LoginPage() {
 
         </div>
       </div>
+    </div>
     </div>
   );
 }

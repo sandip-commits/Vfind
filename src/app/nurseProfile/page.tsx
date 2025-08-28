@@ -10,6 +10,7 @@ const NurseDashboard = () => {
     <>
      <Navbar/>
      <Jobdata/>
+     
     </>
     
   )
