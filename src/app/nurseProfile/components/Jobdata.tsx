@@ -1,3 +1,4 @@
+// app/nurseProfile/JobData.js
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
 import { MapPin, Briefcase, Clock, DollarSign, Calendar } from "lucide-react";
@@ -78,10 +79,16 @@ export default function JobData() {
     const fetchJobs = async () => {
       try {
         setLoading(true);
-        const res = await fetch("https://x76o-gnx4-xrav.a2.xano.io/api:W58sMfI8/jobs");
+        const res = await fetch(
+          "https://x76o-gnx4-xrav.a2.xano.io/api:W58sMfI8/jobs"
+        );
         if (!res.ok) throw new Error("Failed to fetch jobs");
         const data = await res.json();
-        const list = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+          ? data.data
+          : [];
         setJobs(list);
         setFilteredJobs(list);
       } catch (err) {
@@ -136,7 +143,9 @@ export default function JobData() {
     if (typeFilter.length > 0) {
       temp = temp.filter((job) =>
         job.type
-          ? typeFilter.some((t) => normalizeStr(job.type).includes(normalizeStr(t)))
+          ? typeFilter.some((t) =>
+              normalizeStr(job.type).includes(normalizeStr(t))
+            )
           : false
       );
     }
@@ -153,7 +162,6 @@ export default function JobData() {
         });
       });
     }
-
 
     if (roleCategories.length > 0) {
       temp = temp.filter((job) =>
@@ -193,7 +201,17 @@ export default function JobData() {
 
     setFilteredJobs(temp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobs, search, location, typeFilter, shifts, roleCategories, experience, payRate, radius]);
+  }, [
+    jobs,
+    search,
+    location,
+    typeFilter,
+    shifts,
+    roleCategories,
+    experience,
+    payRate,
+    radius,
+  ]);
 
   useEffect(() => {
     const t = setTimeout(() => applyFilters(), 250);
@@ -222,44 +240,45 @@ export default function JobData() {
 
   return (
     <div className="p-6 min-h-screen mx-auto container bg-[#F5F6FA]">
-
-
       <div className="flex gap-6 mt-6 items-start">
         {/* Filters Sidebar (same wide set as CandidateList) */}
         <div className="hidden md:block w-[320px] bg-white rounded-lg p-4 shadow-sm space-y-6 sticky top-[60px] h-[calc(100vh-3rem)]  overflow-y-auto scrollbar-hide">
           <h2 className="font-semibold text-gray-800 flex justify-between">
             All Filters
-            <button onClick={clearFilters} className="text-sm text-blue-600">Clear All</button>
+            <button onClick={clearFilters} className="text-sm text-blue-600">
+              Clear All
+            </button>
           </h2>
           <div className="h-0.5 bg-gray-300" />
 
           {/* Job Type */}
           <div>
             <h3 className="font-medium text-sm text-gray-700 mb-2">Job Type</h3>
-            {["Full-time", "Part-time", "Contract", "Casual", "Open to any"].map((t) => (
+            {[
+              "Full-time",
+              "Part-time",
+              "Contract",
+              "Casual",
+              "Open to any",
+            ].map((t) => (
               <div key={t} className="flex items-center gap-2 text-sm mb-1">
-                <input type="checkbox" checked={typeFilter.includes(t)} onChange={() => handleCheckboxChange(t, setTypeFilter)} className="rounded" />
+                <input
+                  type="checkbox"
+                  checked={typeFilter.includes(t)}
+                  onChange={() => handleCheckboxChange(t, setTypeFilter)}
+                  className="rounded"
+                />
                 <label>{t}</label>
               </div>
             ))}
           </div>
           <div className="h-0.5 bg-gray-300" />
 
-          {/* Shift
-          <div>
-            <h3 className="font-medium text-sm text-gray-700 mb-2">Shift</h3>
-            {["Morning", "Afternoon", "Night"].map((s) => (
-              <div key={s} className="flex items-center gap-2 text-sm mb-1">
-                <input type="checkbox" checked={shifts.includes(s)} onChange={() => handleCheckboxChange(s, setShifts)} className="rounded" />
-                <label>{s}</label>
-              </div>
-            ))}
-          </div>
-          <div className="h-0.5 bg-gray-300" /> */}
-
           {/* Role Category */}
           <div>
-            <h3 className="font-medium text-sm text-gray-700 mb-2">Role Category</h3>
+            <h3 className="font-medium text-sm text-gray-700 mb-2">
+              Role Category
+            </h3>
             {[
               "Clinical Lead / Manager",
               "Registered Nurse (RN)",
@@ -268,7 +287,12 @@ export default function JobData() {
               "Others",
             ].map((role) => (
               <div key={role} className="flex items-center gap-2 text-sm mb-1">
-                <input type="checkbox" checked={roleCategories.includes(role)} onChange={() => handleCheckboxChange(role, setRoleCategories)} className="rounded" />
+                <input
+                  type="checkbox"
+                  checked={roleCategories.includes(role)}
+                  onChange={() => handleCheckboxChange(role, setRoleCategories)}
+                  className="rounded"
+                />
                 <label>{role}</label>
               </div>
             ))}
@@ -277,22 +301,34 @@ export default function JobData() {
 
           {/* Experience — using same labels as CandidateList */}
           <div>
-            <h3 className="font-medium text-sm text-gray-700 mb-2">Experience</h3>
+            <h3 className="font-medium text-sm text-gray-700 mb-2">
+              Experience
+            </h3>
             {Object.keys(EXPERIENCE_RANGES).map((exp) => (
               <div key={exp} className="flex items-center gap-2 text-sm mb-1">
-                <input type="checkbox" checked={experience.includes(exp)} onChange={() => handleCheckboxChange(exp, setExperience)} className="rounded" />
+                <input
+                  type="checkbox"
+                  checked={experience.includes(exp)}
+                  onChange={() => handleCheckboxChange(exp, setExperience)}
+                  className="rounded"
+                />
                 <label>{exp}</label>
               </div>
             ))}
           </div>
           <div className="h-0.5 bg-gray-300" />
 
-
-
           {/* Pay Rate slider */}
           <div>
             <h3 className="font-medium text-sm text-gray-700 mb-2">Pay Rate</h3>
-            <input type="range" min={0} max={1000} value={isNaN(payRate) ? 0 : payRate} onChange={(e) => setPayRate(Number(e.target.value) || 0)} className="w-full accent-blue-600" />
+            <input
+              type="range"
+              min={0}
+              max={1000}
+              value={isNaN(payRate) ? 0 : payRate}
+              onChange={(e) => setPayRate(Number(e.target.value) || 0)}
+              className="w-full accent-blue-600"
+            />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>Any</span>
               <span>${payRate}+</span>
@@ -303,7 +339,14 @@ export default function JobData() {
           {/* Radius (placeholder control) */}
           <div>
             <h3 className="font-medium text-sm text-gray-700 mb-2">Radius</h3>
-            <input type="range" min={0} max={100} value={isNaN(radius) ? 0 : radius} onChange={(e) => setRadius(Number(e.target.value) || 0)} className="w-full accent-blue-600" />
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={isNaN(radius) ? 0 : radius}
+              onChange={(e) => setRadius(Number(e.target.value) || 0)}
+              className="w-full accent-blue-600"
+            />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>Any</span>
               <span>{radius} km</span>
@@ -343,8 +386,9 @@ export default function JobData() {
                       <Calendar size={16} />
                       <span>
                         {job.experienceMin
-                          ? `${job.experienceMin}${job.experienceMax ? ` - ${job.experienceMax}` : ""
-                          } years`
+                          ? `${job.experienceMin}${
+                              job.experienceMax ? ` - ${job.experienceMax}` : ""
+                            } years`
                           : "Not specified"}
                       </span>
                     </div>

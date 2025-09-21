@@ -1,6 +1,7 @@
 "use client";
 
-import React from 'react'
+import React, { Suspense } from "react";
+
 import { Navbar } from './components/Navbar'
 import Jobdata from './components/Jobdata';
 
@@ -8,12 +9,13 @@ import Jobdata from './components/Jobdata';
 const NurseDashboard = () => {
   return (
     <>
-     <Navbar/>
-     <Jobdata/>
-     
+      <Suspense fallback={<div>Loading...</div>}>
+        <Jobdata />
+      
+        <Navbar />
+      </Suspense>
     </>
-    
-  )
+  );
 }
 
 export default NurseDashboard
