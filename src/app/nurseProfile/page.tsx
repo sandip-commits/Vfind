@@ -10,9 +10,8 @@ const NurseDashboard = () => {
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
-        <Jobdata />
-      
         <Navbar />
+        <Jobdata />
       </Suspense>
     </>
   );
